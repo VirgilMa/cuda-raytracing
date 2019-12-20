@@ -52,7 +52,8 @@ hitable *random_scene() {
   list[i++] = new sphere(vec3(0, 1, -4), 1.0, new dielectric(1.5));
   list[i++] =
       new sphere(vec3(-4, 1, -4), 1.0, new lambertian(vec3(0.4, 0.2, 0.1)));
-  list[i++] = new sphere(vec3(4, 1, -4), 1.0, new metal(vec3(0.7, 0.6, 0.5), 0));
+  list[i++] =
+      new sphere(vec3(4, 1, -4), 1.0, new metal(vec3(0.7, 0.6, 0.5), 0));
 
   return new hitable_list(list, i);
 }
@@ -75,7 +76,12 @@ int main() {
   hitable *world = new hitable_list(list, 5);
   // hitable *world = random_scene();
 
-  camera cam;
+  float R = cos(M_PI / 4);
+  list[0] = new sphere(vec3(-R, 0, -1), R, new lambertian(vec3(0, 0, 1)));
+  list[2] = new sphere(vec3(R, 0, -1), R, new lambertian(vec3(1, 0, 0)));
+  world = new hitable_list(list, 3);
+
+  camera cam(120, float(nx) / float(ny));
 
   for (int j = ny - 1; j >= 0; j--) {
     for (int i = 0; i < nx; i++) {
