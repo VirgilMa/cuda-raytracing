@@ -1,6 +1,9 @@
+SRC=main.cpp
+
 all: clean
-	g++ main.cpp -o demo
-	./demo >> p.ppm
+	mkdir out
+	g++ $(SRC) -o ./out/demo
+	./out/demo >> ./out/p.ppm
 
 clean:
-	rm -f p.ppm demo
+	rm -rf out
