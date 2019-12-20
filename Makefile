@@ -1,9 +1,9 @@
 SRC=src/main.cpp
 
 run: clean build
-	d=$$(date +%s)
-	./out/demo >> ./out/p.ppm
-	echo "Run took $$(($$(date +%s)-d)) ns"
+	d=$$(date +%s)\
+	; ./out/demo >> ./out/p.ppm\
+	&& echo "Rendering took $$(($$(date +%s)-d)) s"
 
 build: 
 	mkdir out

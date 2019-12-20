@@ -129,4 +129,6 @@ inline vec3 corss(const vec3 &v1, const vec3 &v2) {
 
 inline vec3 unit_vector(vec3 v) { return v / v.length(); }
 
+inline vec3 sqrt(vec3 v) { return vec3(sqrt(v[0]), sqrt(v[1]), sqrt(v[2])); }
+
 #endif
