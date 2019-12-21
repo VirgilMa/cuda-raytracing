@@ -3,6 +3,7 @@
 #include "hitable_list.hpp"
 #include "material.hpp"
 #include "sphere.hpp"
+#include <fstream>
 #include <iostream>
 #include <random>
 
@@ -58,11 +59,19 @@ hitable *random_scene() {
   return new hitable_list(list, i);
 }
 
-int main() {
-  int nx = 400;
-  int ny = 200;
+int main(int argc, char *argv[]) {
+  std::ofstream file;
+
+  if (argc == 2) {
+    file.open(argv[1]);
+  } else {
+    file.open("./out/p.ppm");
+  }
+
+  int nx = 1920;
+  int ny = 1080;
   int ns = 100;
-  std::cout << "P3\n" << nx << " " << ny << "\n255\n";
+  file << "P3\n" << nx << " " << ny << "\n255\n";
 
   hitable *list[5];
   list[0] =
@@ -74,14 +83,14 @@ int main() {
   list[3] = new sphere(vec3(-1, 0, -1), 0.5, new dielectric(1.5));
   list[4] = new sphere(vec3(-1, 0, -1), -0.45, new dielectric(1.5));
   hitable *world = new hitable_list(list, 5);
-  // hitable *world = random_scene();
+  world = random_scene();
 
-  float R = cos(M_PI / 4);
-  list[0] = new sphere(vec3(-R, 0, -1), R, new lambertian(vec3(0, 0, 1)));
-  list[2] = new sphere(vec3(R, 0, -1), R, new lambertian(vec3(1, 0, 0)));
-  world = new hitable_list(list, 3);
-
-  camera cam(120, float(nx) / float(ny));
+  vec3 lookfrom(2, 2, 1);
+  vec3 lookat(0, 0, -1);
+  float dist_to_focus = (lookfrom - lookat).length();
+  float aperture = 1.0;
+  camera cam(lookfrom, lookat, vec3(0, 1, 0), 90, float(nx) / float(ny),
+             aperture, dist_to_focus);
 
   for (int j = ny - 1; j >= 0; j--) {
     for (int i = 0; i < nx; i++) {
@@ -95,10 +104,12 @@ int main() {
       col /= float(ns);
       col = sqrt(col);
       vec3 icol = 255 * col;
-      std::cout << int(icol.r()) << " " << int(icol.g()) << " " << int(icol.b())
-                << "\n";
+      file << int(icol.r()) << " " << int(icol.g()) << " " << int(icol.b())
+           << "\n";
     }
   }
+
+  file.close();
 
   return 0;
 }

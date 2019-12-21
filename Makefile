@@ -1,13 +1,11 @@
 SRC=src/main.cpp
 
 run: clean build
-	d=$$(date +%s)\
-	; ./out/demo >> ./out/p.ppm\
-	&& echo "Rendering took $$(($$(date +%s)-d)) s"
+	./out/demo
 
 build: 
 	mkdir out
-	g++ $(SRC) -o ./out/demo
+	g++ $(SRC) -O2 -o ./out/demo
 
 clean:
 	rm -rf out
