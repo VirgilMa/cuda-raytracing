@@ -59,31 +59,28 @@ hitable *random_scene() {
   return new hitable_list(list, i);
 }
 
-int main(int argc, char *argv[]) {
+void render(char *filename) {
+
   std::ofstream file;
+  file.open(filename);
 
-  if (argc == 2) {
-    file.open(argv[1]);
-  } else {
-    file.open("./out/p.ppm");
-  }
-
-  int nx = 1920;
-  int ny = 1080;
-  int ns = 100;
+  int nx = 4096;
+  int ny = 2160;
+  int ns = 50;
   file << "P3\n" << nx << " " << ny << "\n255\n";
 
-  hitable *list[5];
-  list[0] =
-      new sphere(vec3(0, 0, -1), 0.5, new lambertian(vec3(0.1, 0.2, 0.5)));
-  list[1] =
-      new sphere(vec3(0, -100.5, -1), 100, new lambertian(vec3(0.8, 0.8, 0.0)));
-  list[2] =
-      new sphere(vec3(1, 0, -1), 0.5, new metal(vec3(0.8, 0.6, 0.2), 0.3));
-  list[3] = new sphere(vec3(-1, 0, -1), 0.5, new dielectric(1.5));
-  list[4] = new sphere(vec3(-1, 0, -1), -0.45, new dielectric(1.5));
-  hitable *world = new hitable_list(list, 5);
-  world = random_scene();
+  // hitable *list[5];
+  // list[0] =
+  //     new sphere(vec3(0, 0, -1), 0.5, new lambertian(vec3(0.1, 0.2, 0.5)));
+  // list[1] =
+  //     new sphere(vec3(0, -100.5, -1), 100, new lambertian(vec3(0.8, 0.8,
+  //     0.0)));
+  // list[2] =
+  //     new sphere(vec3(1, 0, -1), 0.5, new metal(vec3(0.8, 0.6, 0.2), 0.3));
+  // list[3] = new sphere(vec3(-1, 0, -1), 0.5, new dielectric(1.5));
+  // list[4] = new sphere(vec3(-1, 0, -1), -0.45, new dielectric(1.5));
+  // hitable *world = new hitable_list(list, 5);
+  hitable *world = random_scene();
 
   vec3 lookfrom(2, 2, 1);
   vec3 lookat(0, 0, -1);
@@ -110,6 +107,21 @@ int main(int argc, char *argv[]) {
   }
 
   file.close();
+}
+
+int main(int argc, char *argv[]) {
+  char *filename = (char *)"./out/p.ppm";
+  if (argc == 2) {
+    filename = argv[1];
+  }
+
+  time_t start, stop;
+  start = time(NULL);
+
+  render(filename);
+
+  stop = time(NULL);
+  printf("Use Time: %lds\n", (stop - start));
 
   return 0;
 }
