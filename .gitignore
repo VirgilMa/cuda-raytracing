@@ -8,3 +8,9 @@
 out
 demo
 .vs
+*.gz
+*.pdf
+*.log
+*.fls
+*.fdb_latexmk
+*.aux
